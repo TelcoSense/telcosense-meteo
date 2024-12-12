@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>FEKT Meteo</title>
+    <meta name="description" content="Weather station operated by Telcorain Team on Faculty of Electrical Engineering and Communication in Brno, Czech Republic.">
+    <link rel="icon" type="image/x-icon" href="favicon.svg">
+    <link rel="stylesheet" href="index.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Chivo:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Chivo+Mono:ital,wght@0,100..900;1,100..900&family=Chivo:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/three@0.124.0/build/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.124.0/examples/js/controls/OrbitControls.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+  </head>
+  <body>
+    <div id="main" class="main">
+      <div class="container">
+        <div class="left-section">
+          <div class="left-section-top">
+            <div class="left-section-top-container">
+              <div class="left-section-top-location">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="1.3em"
+                  viewBox="0 -960 960 960"
+                  width="1.3em"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 294q122-112 181-203.5T720-552q0-109-69.5-178.5T480-800q-101 0-170.5 69.5T240-552q0 71 59 162.5T480-186Zm0 106Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Zm0-480Z"
+                  />
+                </svg>
+                Technická 12
+              </div>
+              <div id="date" class="left-section-top-date"></div>
+              <div id="time" class="left-section-top-time"></div>
+              <div class="left-section-top-sun-time">
+                <img
+                  width="25"
+                  height="25"
+                  alt="sunrise"
+                  src="./public/SVG/sunrise.svg"
+                />
+                <span id="sunrise"></span>
+                <img
+                  width="25"
+                  height="25"
+                  alt="sunset"
+                  src="./public/SVG/sunset.svg"
+                />
+                <span id="sunset"></span>
+              </div>
+            </div>
+          </div>
+          <div class="left-section-middle">
+            <div class="left-section-middle-container">
+              <span
+                id="weatherText"
+                class="left-section-middle-weather-text"
+              ></span>
+              <div class="left-section-middle-weather">
+                <img
+                  id="weatherIcon"
+                  alt="weather icon"
+                  src="public/SVG/CLEAR.svg"
+                />
+                <span id="temp"></span>
+              </div>
+              <div class="left-section-middle-feels-dew">
+                <div class="left-section-middle-feels-dew-container">
+                  <div>
+                    <img width="25" alt="aat icon" src="public/SVG/AAT.svg" />
+                    <span>Feels like:</span>
+                  </div>
+                  <span id="feelsLike"></span>
+                </div>
+                <div class="left-section-middle-feels-dew-container">
+                  <div>
+                    <img
+                      width="25"
+                      alt="dew point icon"
+                      src="public/SVG/dew_point.svg"
+                    />
+                    <span>Dew point:</span>
+                  </div>
+                  <span id="dewPoint"></span>
+                </div>
+                <div class="left-section-middle-feels-dew-container">
+                  <div>
+                    <img
+                      width="25"
+                      alt="dew point icon"
+                      src="public/SVG/rain-intensity.svg"
+                    />
+                    <span>24h rainfall:</span>
+                  </div>
+                  <span id="rainSum"></span>
+                </div>
+                <div class="left-section-middle-feels-dew-container">
+                  <div>
+                    <img
+                      width="25"
+                      alt="snow fall icon"
+                      src="public/SVG/snowfall.svg"
+                    />
+                    <span>24h snowfall:</span>
+                  </div>
+                  <span id="snowSum"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="left-section-bottom">
+            <div class="left-section-bottom-container">
+              <div class="left-section-bottom-row">
+                <div>
+                  <img
+                    width="30"
+                    height="30"
+                    alt="humidity icon"
+                    src="public/SVG/humi.svg"
+                  />
+                  <span> Humidity: </span>
+                </div>
+                <span id="humi"></span>
+              </div>
+              <div class="left-section-bottom-row">
+                <div>
+                  <img
+                    width="30"
+                    height="30"
+                    alt="pressure icon"
+                    src="public/SVG/press.svg"
+                  />
+                  <span> Pressure: </span>
+                </div>
+                <span id="press"></span>
+              </div>
+              <div class="left-section-bottom-row">
+                <div>
+                  <img
+                    width="30"
+                    height="30"
+                    alt="visibility icon"
+                    src="public/SVG/visib.svg"
+                  />
+                  <span> Visibility: </span>
+                </div>
+                <span id="visib"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="right-section">
+          <div class="right-section-container">
+            <div class="right-section-row">
+              <div class="right-section-row-left">
+                <div class="right-section-row-left-top">
+                  <img
+                    width="35"
+                    alt="temperature icon"
+                    src="public/SVG/temp.svg"
+                  />
+                  <span>Temperature</span>
+                </div>
+                <div class="right-section-row-left-bottom">
+                  <span>Min: </span><span id="tempMin"></span>
+                </div>
+                <div class="right-section-row-left-bottom">
+                  <span>Max: </span><span id="tempMax"></span>
+                </div>
+              </div>
+              <div class="right-section-row-right">
+                <canvas id="tempChart"></canvas>
+              </div>
+            </div>
+            <div class="right-section-row">
+              <div class="right-section-row-left">
+                <div class="right-section-row-left-top">
+                  <img
+                    width="35"
+                    alt="rain intensity icon"
+                    src="public/SVG/rain-intensity.svg"
+                  />
+                  <span>Rain Intensity</span>
+                </div>
+                <div class="right-section-row-left-bottom">
+                  <span>Current: </span><span id="rainCurrent"></span>
+                </div>
+                <div class="right-section-row-left-bottom">
+                  <span>Max: </span><span id="rainMax"></span>
+                </div>
+              </div>
+              <div class="right-section-row-right">
+                <canvas id="rainChart"></canvas>
+              </div>
+            </div>
+            <div class="right-section-row">
+              <div class="right-section-row-left wind-speed">
+                <div class="right-section-row-left-top">
+                  <img
+                    width="35"
+                    alt="wind speed icon"
+                    src="public/SVG/wind-speed.svg"
+                  />
+                  <span>Wind Speed</span>
+                </div>
+                <div class="right-section-row-left-bottom">
+                  <span>Current: </span><span id="windCurrent"></span>
+                </div>
+                <div class="right-section-row-left-bottom">
+                  <span>Max: </span><span id="windMax"></span>
+                </div>
+              </div>
+              <div class="right-section-row-right">
+                <canvas id="windChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <div class="footer-left">
+          <div class="footer-left-left">
+            <div class="footer-left-left-top">
+              <div class="footer-left-left-top-image">
+                <span class="">Professional weather station operated by</span>
+                <img
+                  id="utko"
+                  alt="VUT FEEC logo"
+                  src="./public/utko/UTKO_Inverze_RGB_EN.png"
+                />
+              </div>
+              <div class="footer-left-left-top-image tacr">
+                <span class="">
+                  Supported by the Technology Agency of the Czech Republic
+                </span>
+                <div>
+                  <img
+                    id="tacr"
+                    alt="TACR logo"
+                    src="./public/tacr/logo_en_white.png"
+                  />
+                  <div>
+                    <div>SS07020434</div>
+                    <div>SS06020416</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="footer-left-left-bottom">
+              <span>
+                Authors: Petr Musil, Milan Bubniak, Petr Mlýnek, Jan Hejna,
+                Miroslav Babeľa, Jakub Soboňa, Matěj Ištvánek, Štěpán Miklánek,
+                Peter Barcík
+              </span>
+            </div>
+          </div>
+          <div class="footer-left-right">
+            <span
+              >Find out more about us,<br />
+              the current bachelor and master theses,<br />
+              and
+              <a class="join-our-team" href="https://about.telcorain.cz"
+                >join our team.</a
+              >
+            </span>
+            <img
+              src="public/SVG/arrow-right.svg"
+              width="30"
+              alt="arrow right"
+            />
+          </div>
+        </div>
+        <div class="footer-right">
+          <div class="footer-right-container">
+            <img id="qr" src="./public/SVG/qr.svg" alt="qr code" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="animation" class="animation"></div>
+    <script src="config.js"></script>
+    <script src="constants.js"></script>
+    <script src="utils.js"></script>
+    <script src="rain.js"></script>
+    <script src="index.js"></script>
+  </body>
+</html>
