@@ -302,6 +302,10 @@ body {
   width: 5vw;
 }
 
+#eu {
+  width: 20vw;
+}
+
 #qr {
   height: 16vh;
 }
@@ -406,6 +410,11 @@ body {
   #tacr {
     width: 12vw;
   }
+
+  #eu {
+    width: 20vw;
+  }
+  
   #utko {
     width: 35vw;
   }
@@ -516,7 +525,10 @@ body {
     font-size: 3rem;
   }
   #tacr {
-    width: 20vw;
+    width: 12vw;
+  }
+  #eu {
+    width: 40vw;
   }
   #utko {
     width: 60vw;
