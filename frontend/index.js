@@ -64,10 +64,16 @@ async function setMeteo() {
   )} mm`;
 
   if ((Math.round(data.temp * 10) / 10).toFixed(1) < 3) {
+    const snowDiv = document.getElementById("snowDiv");
+    snowDiv.style.visibility = "visible";
     const snowSumSpan = document.getElementById("snowSum");
     snowSumSpan.innerHTML = `${(Math.round(data.snowSum * 10) / 10).toFixed(
       1,
     )} mm`;
+  }
+  else {
+    const snowDiv = document.getElementById("snowDiv");
+    snowDiv.style.visibility = "hidden";
   }
 
   const sunrise = moment(data.sunrise);
