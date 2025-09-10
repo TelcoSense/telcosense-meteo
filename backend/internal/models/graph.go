@@ -13,6 +13,7 @@ type Graph struct {
 	Temp         Data `json:"temp"`
 	WindSpeed    WindData `json:"windSpeed"`
 	Rain         Data `json:"rain"`
+	Humi		 Data `json:"humi"`
 }
 
 type Data struct {
@@ -44,6 +45,7 @@ func (m *GraphModel) Get() (*Graph, error) {
 			or r._field == "temp"
 			or r._field == "wind_speed"
 			or r._field == "wind_dir"
+			or r._field == "humi"
 		))`
 	results, err := m.QueryAPI.Query(context.Background(), query)
 	if err != nil {
@@ -59,6 +61,10 @@ func (m *GraphModel) Get() (*Graph, error) {
 		} else if field == "temp" {
 			graphs.Temp.Time = append(graphs.Temp.Time, results.Record().Time().Format(time.UnixDate))
 			graphs.Temp.Values = append(graphs.Temp.Values, results.Record().Value().(float64))
+			continue
+		} else if field == "humi" {
+			graphs.Humi.Time = append(graphs.Humi.Time, results.Record().Time().Format(time.UnixDate))
+			graphs.Humi.Values = append(graphs.Humi.Values, results.Record().Value().(float64))
 			continue
 		} else if field == "wind_speed" {
 			graphs.WindSpeed.Time = append(graphs.WindSpeed.Time, results.Record().Time().Format(time.UnixDate))
