@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TelcoSense Meteo</title>
+    <meta
+      name="description"
+      content="Weather station operated by TelcoSense Team at BUT FEEC."
+    />
+    <link rel="icon" type="image/x-icon" href="favicon.svg" />
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Chivo:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/three@0.124.0/build/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.124.0/examples/js/controls/OrbitControls.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+  </head>
+  <body>
+    <div class="outer">
+      <div class="container">
+        <div class="row row-1">
+          <div class="col col-1-1">
+            <div class="left-section">
+              <div class="left-section-top">
+                <div class="left-section-top-container">
+                  <div class="left-section-top-location">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="1.3em"
+                      viewBox="0 -960 720 960"
+                      width="1.3em"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 294q122-112 181-203.5T720-552q0-109-69.5-178.5T480-800q-101 0-170.5 69.5T240-552q0 71 59 162.5T480-186Zm0 106Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Zm0-480Z"
+                      />
+                    </svg>
+                    Technická 12
+                  </div>
+                  <div id="date" class="left-section-top-date"></div>
+                  <div id="time" class="left-section-top-time"></div>
+                  <div class="left-section-top-sun-time">
+                    <img
+                      width="25"
+                      height="25"
+                      alt="sunrise"
+                      src="./public/SVG/sunrise.svg"
+                      class="icon"
+                    />
+                    <span id="sunrise"></span>
+                    <img
+                      width="25"
+                      height="25"
+                      alt="sunset"
+                      src="./public/SVG/sunset.svg"
+                      class="icon"
+                    />
+                    <span id="sunset"></span>
+                  </div>
+                </div>
+                <div class="left-section-middle-container">
+                  <span
+                    id="weatherText"
+                    class="left-section-middle-weather-text weather-text"
+                  ></span>
+                  <div class="left-section-middle-weather">
+                    <img
+                      id="weatherIcon"
+                      alt="weather icon"
+                      src="public/SVG/CLEAR.svg"
+                    />
+                    <span id="temp" class="temperature-text"></span>
+                  </div>
+                  <div class="left-section-middle-feels-dew">
+                    <div class="left-section-middle-feels-dew-container">
+                      <div>
+                        <img
+                          width="25"
+                          alt="aat icon"
+                          src="public/SVG/AAT.svg"
+                          class="icon"
+                        />
+                        <span>Feels like:</span>
+                      </div>
+                      <span id="feelsLike"></span>
+                    </div>
+                    <div class="left-section-middle-feels-dew-container">
+                      <div>
+                        <img
+                          width="25"
+                          alt="dew point icon"
+                          src="public/SVG/dew_point.svg"
+                          class="icon"
+                        />
+                        <span>Dew point:</span>
+                      </div>
+                      <span id="dewPoint"></span>
+                    </div>
+                    <div class="left-section-middle-feels-dew-container">
+                      <div>
+                        <img
+                          width="25"
+                          alt="dew point icon"
+                          src="public/SVG/rain-intensity.svg"
+                          class="icon"
+                        />
+                        <span>24h rainfall:</span>
+                      </div>
+                      <span id="rainSum"></span>
+                    </div>
+                    <div
+                      id="snowDiv"
+                      class="left-section-middle-feels-dew-container"
+                    >
+                      <div>
+                        <img
+                          width="25"
+                          alt="snow fall icon"
+                          src="public/SVG/snowfall.svg"
+                          class="icon"
+                        />
+                        <span>24h snowfall:</span>
+                      </div>
+                      <span id="snowSum"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="left-section-bottom">
+                <div class="left-section-bottom-container">
+                  <div class="left-section-bottom-row">
+                    <div>
+                      <img
+                        width="30"
+                        height="30"
+                        alt="pressure icon"
+                        src="public/SVG/press.svg"
+                        class="icon"
+                      />
+                      <span> Pressure: </span>
+                    </div>
+                    <span id="press"></span>
+                  </div>
+                  <div class="left-section-bottom-row">
+                    <div>
+                      <img
+                        width="30"
+                        height="30"
+                        alt="visibility icon"
+                        src="public/SVG/visib.svg"
+                        class="icon"
+                      />
+                      <span> Visibility: </span>
+                    </div>
+                    <span id="visib"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col col-1-2">
+            <div class="flex-4x2">
+              <div class="flex-row">
+                <div class="flex-cell">
+                  <div class="right-section-row-left-top">
+                    <div>
+                      <img
+                        width="35"
+                        height="35"
+                        alt="temperature icon"
+                        src="public/SVG/temp.svg"
+                        class="icon"
+                      />
+                      <span>Temperature</span>
+                    </div>
+                  </div>
+                  <div class="right-section-row-left-bottom">
+                    <span>Min: </span><span id="tempMin"></span>
+                  </div>
+                  <div class="right-section-row-left-bottom">
+                    <span>Max: </span><span id="tempMax"></span>
+                  </div>
+                </div>
+                <div class="flex-cell">
+                  <div id="tempChart" style="width: 100%; height: 100%"></div>
+                </div>
+              </div>
+              <div class="flex-row">
+                <div class="flex-cell">
+                  <div class="right-section-row-left-top">
+                    <div>
+                      <img
+                        width="35"
+                        height="35"
+                        alt="wind speed icon"
+                        src="public/SVG/humi.svg"
+                        class="icon"
+                      />
+                      <span>Humidity</span>
+                    </div>
+                  </div>
+                  <div class="right-section-row-left-bottom">
+                    <span>Current: </span><span id="humiCurrent"></span>
+                  </div>
+                  <div class="right-section-row-left-bottom">
+                    <span>Max: </span><span id="humiMax"></span>
+                  </div>
+                </div>
+                <div class="flex-cell">
+                  <div id="humiChart" style="width: 100%; height: 100%"></div>
+                </div>
+              </div>
+              <div class="flex-row">
+                <div class="flex-cell">
+                  <div class="right-section-row-left-top">
+                    <div>
+                      <img
+                        width="35"
+                        height="35"
+                        alt="rain intensity icon"
+                        src="public/SVG/rain-intensity.svg"
+                        class="icon"
+                      />
+                      <span>Rain intensity</span>
+                    </div>
+                  </div>
+                  <div class="right-section-row-left-bottom">
+                    <span>Current: </span><span id="rainCurrent"></span>
+                  </div>
+                  <div class="right-section-row-left-bottom">
+                    <span>Max: </span><span id="rainMax"></span>
+                  </div>
+                </div>
+                <div class="flex-cell">
+                  <div id="rainChart" style="width: 100%; height: 100%"></div>
+                </div>
+              </div>
+              <div class="flex-row">
+                <div class="flex-cell">
+                  <div class="right-section-row-left-top">
+                    <div>
+                      <img
+                        width="35"
+                        height="35"
+                        alt="wind speed icon"
+                        src="public/SVG/wind-speed.svg"
+                        class="icon"
+                      />
+                      <span>Wind speed</span>
+                    </div>
+                  </div>
+                  <div class="right-section-row-left-bottom">
+                    <span>Current: </span><span id="windCurrent"></span>
+                  </div>
+                  <div class="right-section-row-left-bottom">
+                    <span>Max: </span><span id="windMax"></span>
+                  </div>
+                </div>
+                <div class="flex-cell">
+                  <div id="windChart" style="width: 100%; height: 100%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row row-2">
+          <div class="col col-2-1">
+            <div class="col-2-1-inner">
+              <div class="col-2-1-top">
+                <div class="top-col top-col-1">
+                  <div class="top-col-text">
+                    Professional weather station operated by
+                  </div>
+                  <div class="top-col-icon">
+                    <img src="public/utko/UTKO_Inverze_RGB_EN.png" alt="icon" />
+                  </div>
+                </div>
+
+                <div class="top-col top-col-2">
+                  <div class="top-col-text">
+                    Supported by the Technology Agency of the Czech Republic
+                  </div>
+                  <div class="top-col-2-images">
+                    <div class="top-col-icon">
+                      <img src="public/eu/eu_logo.png" alt="icon" />
+                    </div>
+                    <div class="top-col-icon">
+                      <img src="public/tacr/logo_en_white.png" alt="icon" />
+                    </div>
+                    <div class="top-col-text-tacr">
+                      <span>SS06020416</span> <span>SS07020434</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="top-col top-col-3">
+                  <span class="top-col-text-find">
+                    Find out more about us,<br />
+                    the current bachelor and master theses,<br />and
+                    <a href="https://about.telcosense.cz">join our team.</a>
+                  </span>
+                  <img
+                    width="30"
+                    height="30"
+                    alt="visibility icon"
+                    src="public/SVG/arrow-right.svg"
+                    class="icon arrow-icon"
+                  />
+                </div>
+              </div>
+              <div class="col-2-1-bottom">
+                Authors: Petr Musil, Milan Bubniak, Petr Mlýnek, Jan Hejna,
+                Miroslav Babeľa, Matěj Ištvánek, Štěpán Miklánek, Peter Barcík
+              </div>
+            </div>
+          </div>
+          <div class="col col-2-2">
+            <img src="public/SVG/qr.svg" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="loading" class="loading">
+      <span class="loading-span">Loading...</span>
+    </div>
+
+    <div id="animation" class="animation"></div>
+
+    <script src="config.js"></script>
+    <script src="utils.js"></script>
+    <script src="rain.js"></script>
+    <script src="index.js"></script>
+  </body>
+</html>
