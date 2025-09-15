@@ -548,19 +548,36 @@ function createChart(id, data, labels, options, pointStyle = false) {
   });
 }
 
+let prevBoundingRect = null;
 let resizeTimeout = null;
-let prevWidth = window.innerWidth;
-let prevHeight = window.innerHeight;
 
 function handleChartResize() {
   if (resizeTimeout) clearTimeout(resizeTimeout);
+
   resizeTimeout = setTimeout(() => {
+    const container = document.querySelector(".container");
+    if (!container) return;
+
+    const rect = container.getBoundingClientRect();
+
+    if (
+      prevBoundingRect &&
+      Math.abs(rect.width - prevBoundingRect.width) < 2 &&
+      Math.abs(rect.height - prevBoundingRect.height) < 2
+    ) {
+      // Skip resize — no actual layout change
+      return;
+    }
+
+    prevBoundingRect = rect;
+
     if (tempChart) {
       tempChart.dispose();
       humiChart.dispose();
       rainChart.dispose();
       windChart.dispose();
     }
+
     setGraph();
   }, 100);
 }
@@ -592,7 +609,7 @@ function resizeToAspect() {
       qrCol.style.height = "0px";
     }
 
-    handleChartResize();
+    // handleChartResize();
     return;
   }
 
@@ -620,8 +637,6 @@ function resizeToAspect() {
     qrCol.style.width = rowHeight + "px";
     qrCol.style.height = rowHeight + "px";
   }
-
-  handleChartResize();
 }
 
 function adjustQrSquare() {
@@ -653,6 +668,7 @@ async function init() {
   window.addEventListener("resize", () => {
     resizeToAspect();
     adjustQrSquare();
+    handleChartResize();
   });
 
   window.addEventListener("load", () => {
