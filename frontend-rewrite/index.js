@@ -652,10 +652,6 @@ function adjustQrSquare() {
 }
 
 async function init() {
-  setTimeDate();
-  setMeteo();
-  setGraph();
-
   setInterval(() => {
     setMeteo();
     setGraph();
@@ -676,7 +672,11 @@ async function init() {
     adjustQrSquare();
   });
 
+  setTimeDate();
+
   setInterval(() => {
+    setMeteo();
+    setGraph();
     const loadingDiv = document.querySelector("#loading");
     loadingDiv.style.display = "none";
   }, 150);
