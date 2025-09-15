@@ -13,10 +13,9 @@
 html,
 body {
   width: 100%;
-  min-height: 100vh;
+  min-height: 100%;
   overflow-x: hidden;
   font-family: "Inter", sans-serif;
-  background: linear-gradient(to bottom, #dce3ec, #cfd8e2);
 }
 
 /* ----------- LAYOUT WRAPPERS ----------- */
@@ -549,6 +548,7 @@ a {
   .top-col-icon img {
     margin-top: calc(1 * var(--u));
     margin-bottom: calc(1 * var(--u));
+    max-height: calc(6 * var(--u));
   }
 
   .top-col-text-tacr {
@@ -575,10 +575,14 @@ a {
     justify-content: center;
   }
 
+  .left-section-middle-feels-dew {
+    margin-top: 35px;
+  }
+
   #tempChart,
   #humiChart,
   #rainChart,
   #windChart {
-    height: 32vw !important;
+    height: 34vw !important;
   }
 }

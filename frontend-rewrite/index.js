@@ -56,7 +56,7 @@ function createEChart(
   const gridLayout = isMobile
     ? {
         top: "15%",
-        left: "15%",
+        left: "20%",
         right: "6%",
         bottom: "18%",
       }
@@ -264,6 +264,7 @@ async function setMeteo() {
   const weatherIcon = document.getElementById("weatherIcon");
   weatherIcon.src = `../public/SVG/${weather.icon}.svg`;
 
+  document.documentElement.style.backgroundColor = weather.skyColor;
   document.body.style.backgroundColor = weather.skyColor;
 
   if (document.querySelector(".animation canvas")) {
@@ -463,9 +464,14 @@ async function setGraph() {
   var arrowData = [];
   var arrowRotations = [];
 
+  const isMobile = window.innerWidth <= 1024;
+
   for (var i = 0; i < windAvg.times.length; i++) {
     var t = new Date(windAvg.times[i]);
-    if (t.getMinutes() === 0) {
+    const contidion = isMobile
+      ? t.getMinutes() === 0 && t.getHours() % 2 === 0
+      : t.getMinutes() === 0;
+    if (contidion) {
       var v = windAvg.values[i];
       var d = windAvg.windDirs[i];
       arrowData.push([t, v]);
