@@ -221,25 +221,3 @@ const mapCode = (code, isDay) => {
       };
   }
 };
-
-const createRotatedArrowImg = (deg) => {
-  const arrowSvg = `
-    <svg
-    width="60"
-    height="60"
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 300 300"
-    >
-   <g transform="rotate(${deg - 180} 150 150)" class="layer" id="Layer_1">
-   <title>Layer 1</title>
-   <path d="m129.77,93.36l20.23,-59.08l20.23,59.08l-10.12,0l0,59.36l-20.23,0l0,-59.36z" fill="#FF0000" id="svg_2" stroke="#FF0000" stroke-width="0"/>
-  </g>
-  </svg>
-    `;
-
-  const blob = new Blob([arrowSvg], { type: "image/svg+xml" });
-  const url = URL.createObjectURL(blob);
-  const arrow = new Image();
-  arrow.src = url;
-  return arrow;
-};

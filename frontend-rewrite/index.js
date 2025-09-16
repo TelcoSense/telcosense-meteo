@@ -549,7 +549,6 @@ function createChart(id, data, labels, options, pointStyle = false) {
 
 let prevBoundingRect = null;
 let resizeTimeout = null;
-let skipInitialResize = true;
 
 function handleChartResize() {
   if (resizeTimeout) clearTimeout(resizeTimeout);
@@ -560,13 +559,7 @@ function handleChartResize() {
 
     const rect = container.getBoundingClientRect();
 
-    // Skip first resize triggered by scroll-chrome hide
-    if (skipInitialResize) {
-      skipInitialResize = false;
-      prevBoundingRect = rect;
-      return;
-    }
-
+    // Only skip if dimensions didn’t actually change (to avoid false resizes)
     if (
       prevBoundingRect &&
       Math.abs(rect.width - prevBoundingRect.width) < 2 &&
@@ -575,8 +568,10 @@ function handleChartResize() {
       return;
     }
 
+    // Update previous rect (whether it's first resize or not)
     prevBoundingRect = rect;
 
+    // Proper redraw
     if (tempChart) {
       tempChart.dispose();
       humiChart.dispose();
@@ -657,6 +652,17 @@ function adjustQrSquare() {
 
 async function init() {
   setTimeDate();
+  
+  window.addEventListener("resize", () => {
+    resizeToAspect();
+    adjustQrSquare();
+    handleChartResize();
+  });
+
+  window.addEventListener("load", () => {
+    resizeToAspect();
+    adjustQrSquare();
+  });
 
   setTimeout(async () => {
     await setMeteo();
@@ -673,17 +679,6 @@ async function init() {
   setInterval(() => {
     setTimeDate();
   }, 1000);
-
-  window.addEventListener("resize", () => {
-    resizeToAspect();
-    adjustQrSquare();
-    handleChartResize();
-  });
-
-  window.addEventListener("load", () => {
-    resizeToAspect();
-    adjustQrSquare();
-  });
 }
 
 init();
