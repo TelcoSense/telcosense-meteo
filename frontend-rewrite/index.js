@@ -119,7 +119,7 @@ function createEChart(
       max: timeMax,
       splitNumber: splitCount,
       axisPointer: {
-        show: true,
+        show: isMobile ? false : true,
         label: {
           show: true,
           backgroundColor: "#333",
@@ -166,7 +166,7 @@ function createEChart(
         fontSize: u * 1.5,
       },
       axisPointer: {
-        show: true,
+        show: isMobile ? false : true,
         label: {
           show: true,
           backgroundColor: "#333",
@@ -265,7 +265,6 @@ async function setMeteo() {
   weatherIcon.src = `../public/SVG/${weather.icon}.svg`;
 
   document.documentElement.style.backgroundColor = weather.skyColor;
-  document.body.style.backgroundColor = weather.skyColor;
 
   if (document.querySelector(".animation canvas")) {
     if (
@@ -550,6 +549,7 @@ function createChart(id, data, labels, options, pointStyle = false) {
 
 let prevBoundingRect = null;
 let resizeTimeout = null;
+let skipInitialResize = true;
 
 function handleChartResize() {
   if (resizeTimeout) clearTimeout(resizeTimeout);
@@ -560,12 +560,18 @@ function handleChartResize() {
 
     const rect = container.getBoundingClientRect();
 
+    // Skip first resize triggered by scroll-chrome hide
+    if (skipInitialResize) {
+      skipInitialResize = false;
+      prevBoundingRect = rect;
+      return;
+    }
+
     if (
       prevBoundingRect &&
       Math.abs(rect.width - prevBoundingRect.width) < 2 &&
       Math.abs(rect.height - prevBoundingRect.height) < 2
     ) {
-      // Skip resize — no actual layout change
       return;
     }
 
@@ -579,7 +585,7 @@ function handleChartResize() {
     }
 
     setGraph();
-  }, 100);
+  }, 150);
 }
 
 function resizeToAspect() {
@@ -608,8 +614,6 @@ function resizeToAspect() {
       qrCol.style.width = "0px";
       qrCol.style.height = "0px";
     }
-
-    // handleChartResize();
     return;
   }
 
@@ -652,6 +656,15 @@ function adjustQrSquare() {
 }
 
 async function init() {
+  setTimeDate();
+
+  setTimeout(async () => {
+    await setMeteo();
+    await setGraph();
+    const loadingDiv = document.querySelector("#loading");
+    loadingDiv.style.display = "none";
+  }, 150);
+
   setInterval(() => {
     setMeteo();
     setGraph();
@@ -671,15 +684,6 @@ async function init() {
     resizeToAspect();
     adjustQrSquare();
   });
-
-  setTimeDate();
-
-  setInterval(() => {
-    setMeteo();
-    setGraph();
-    const loadingDiv = document.querySelector("#loading");
-    loadingDiv.style.display = "none";
-  }, 150);
 }
 
 init();
