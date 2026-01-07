@@ -352,6 +352,7 @@ body {
   border-radius: calc(0.5 * var(--u));
   color: white;
   align-items: center;
+  /* background-color: aqua; */
 }
 
 .top-col:last-child {
@@ -364,7 +365,8 @@ body {
 }
 
 .top-col-text-tacr {
-  font-size: calc(1.2 * var(--u));
+  font-size: calc(1.1 * var(--u));
+  /* margin-left: calc(1 * var(--u)); */
   display: flex;
   flex-direction: column;
   text-align: center;
@@ -403,12 +405,12 @@ body {
 }
 
 .top-col-2 {
-  flex: 1.4 1 0;
+  flex: 1 1 0;
 }
 
 .top-col-3 {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding-top: calc(2 * var(--u));
@@ -554,6 +556,7 @@ a {
   .top-col-text-tacr {
     text-align: center;
     margin-top: calc(1 * var(--u));
+    
     font-size: calc(1.4 * var(--u));
   }
 
